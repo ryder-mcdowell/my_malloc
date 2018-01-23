@@ -13,6 +13,8 @@ void* useFreeSpace(free_list_node* old_free_block, free_list_node* last, int siz
   new_free_block = (void*)old_free_block + size + sizeof(free_list_node);    //+16??   sizeof(free_list_node)
   new_free_block->size = old_free_block->size - size - sizeof(free_list_node);
   new_free_block->next = old_free_block->next;
+
+
   if (last == NULL) {
     head = new_free_block;
   } else {
@@ -79,33 +81,42 @@ void* my_malloc(int size) {
   } else {
     printf("-my_malloc: scanning free list...");
     free_list_node* free_block;
-    free_list_node* last;
+    free_list_node* last = NULL;
     free_list_node* current = head;
 
     //scan
     while (current->next != NULL) {
-      if (current->size >= size + 16) {
+      if (current->size >= size) {
         printf("found space in free list\n");
         free_block = current;
+        last = NULL;
+        break;
       }
-      last = current;
+      //last = current;
       current = current->next;
     }
-    if (current->size >= size + 16) {
+    //last block in free list
+    if (current->size >= size && free_block == NULL) {
       printf("found space in free list\n");
       free_block = current;
       last = NULL;
     }
     //end scan
 
+    //if need space
     if (free_block != NULL) {
       printf("-my_malloc: free space is @ 0x%x\n", free_block);
 
+      printf("free_block = 0x%x\n", free_block);
       printf("last = 0x%x\n", last);
+      printf("size = %d\n", size);
+      printf("current = 0x%x\n", current);
+
 
       //returns location of user's requested space
       user_space_break = useFreeSpace(free_block, last, size);
 
+    //if dont need space
     } else {
       printf("not enough space in free list\n");
       last = current;

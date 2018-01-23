@@ -28,9 +28,10 @@ int main() {
   printf("main: my memory is at 0x%x\n", cheetos_pointer);
   print_free_list();
 
-  //printf("main: allocating array of 200 doubles\n");
-  //void *pppp = my_malloc(200 * sizeof(double));
-  //print_free_list();
+  printf("main: allocating array of 100 doubles\n");
+  void *burritos_pointer = my_malloc(100 * sizeof(double));
+  printf("main: my memory is at 0x%x\n", burritos_pointer);
+  print_free_list();
 
   //uses all free space
   //printf("main: allocating array of 200 doubles\n");
