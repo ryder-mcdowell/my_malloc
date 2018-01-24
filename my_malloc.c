@@ -55,11 +55,6 @@ void* allocateSpace(free_list_node* last) {
   return previous_break;
 }
 
-//Scan and return free_node
-free_list_node* scan(free_list_node* head, free_list_node* last) {
-
-}
-
 void* my_malloc(int size) {
   void* user_space_break;
   void* previous_break;
