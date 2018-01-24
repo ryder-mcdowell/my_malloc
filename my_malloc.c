@@ -10,29 +10,40 @@ void* useFreeSpace(free_list_node* old_free_block, free_list_node* last, int siz
 
 
   //setup new free block
-  new_free_block = (void*)old_free_block + size + sizeof(free_list_node);    //+16??   sizeof(free_list_node)
-  new_free_block->size = old_free_block->size - size - sizeof(free_list_node);
-  new_free_block->next = old_free_block->next;
+  if (old_free_block->size != size) {
+    new_free_block = (void*)old_free_block + size + sizeof(free_list_node);
+    new_free_block->size = old_free_block->size - size - sizeof(free_list_node);
+    new_free_block->next = old_free_block->next;
+    printf("-USEFREEPACE: free block updated with size %d and @ 0x%x\n", new_free_block->size, new_free_block);
 
-
-  if (last == NULL) {
-    head = new_free_block;
+    if (last == NULL) {
+      head = new_free_block;
+    } else {
+      if (last != old_free_block) {
+        last->next = new_free_block;
+      }
+    }
+  //delete block
   } else {
-    if (last != old_free_block) {
-      last->next = new_free_block;
+    printf("-USEFREEPACE: free block completely used\n");
+    if (last == NULL) {
+      head = old_free_block->next;
+    } else {
+      head = last;
     }
   }
+
 
   //setup user's requested block
   new_user_block = (void*)old_free_block;
   new_user_block->size = size;
   new_user_block->next = NULL;
 
-  printf("-USEFREEPACE: free block updated with size %d and @ 0x%x\n", new_free_block->size, new_free_block);
 
   return (void*)new_user_block + 16;
 }
 
+//ALLOCATE more space and append to free list, returns previous break point
 void* allocateSpace(free_list_node* last) {
   printf("-ALLOCATESPACE: allocating new free block\n");
   free_list_node* new_block;
@@ -159,6 +170,7 @@ void print_free_list() {
     while (current->next != NULL) {
       printf("       %d  |  0x  %7x  |    %4d  |  0x  %7x\n", number, current, current->size, current->next);
       current = current->next;
+      number = number + 1;
     }
     printf("       %d  |  0x  %7x  |    %4d  |  0x  %7x\n", number, current, current->size, current->next);
     printf("===================================================\n");
