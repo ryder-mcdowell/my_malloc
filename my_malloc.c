@@ -55,6 +55,11 @@ void* allocateSpace(free_list_node* last) {
   return previous_break;
 }
 
+//Scan and return free_node
+free_list_node* scan(free_list_node* head, free_list_node* last) {
+
+}
+
 void* my_malloc(int size) {
   void* user_space_break;
   void* previous_break;
@@ -84,39 +89,43 @@ void* my_malloc(int size) {
     free_list_node* last = NULL;
     free_list_node* current = head;
 
-    //scan
+    //START SCAN
     while (current->next != NULL) {
-      if (current->size >= size) {
-        printf("found space in free list\n");
+      if (current->size >= size && last == NULL) {
+        printf("found space in free list(first)\n");
         free_block = current;
-        last = NULL;
         break;
+
+      } else if (current->size >= size && last != NULL) {
+        printf("found space in free list(middle)\n");
+        free_block = current;
+        break;
+
+      } else {
+        last = current;
+        current = current->next;
       }
-      //last = current;
-      current = current->next;
+    }
+    //only block in free list
+    if (current->size >= size && last == NULL && free_block == NULL) {
+      printf("found space in free list(only)\n");
+      free_block = current;
     }
     //last block in free list
-    if (current->size >= size && free_block == NULL) {
-      printf("found space in free list\n");
+    if (current->size >= size && last != NULL && free_block == NULL) {
+      printf("found space in free list(last)\n");
       free_block = current;
-      last = NULL;
     }
-    //end scan
+    //END SCAN
 
-    //if need space
+    //if need more space (didn't find a free block)
     if (free_block != NULL) {
       printf("-my_malloc: free space is @ 0x%x\n", free_block);
-
-      printf("free_block = 0x%x\n", free_block);
-      printf("last = 0x%x\n", last);
-      printf("size = %d\n", size);
-      printf("current = 0x%x\n", current);
-
 
       //returns location of user's requested space
       user_space_break = useFreeSpace(free_block, last, size);
 
-    //if dont need space
+    //if dont need more space (found a free block)
     } else {
       printf("not enough space in free list\n");
       last = current;
