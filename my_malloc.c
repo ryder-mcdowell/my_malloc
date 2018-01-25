@@ -66,6 +66,7 @@ void* allocateSpace(free_list_node* last) {
   return previous_break;
 }
 
+
 void* my_malloc(int size) {
   void* user_space_break;
   void* previous_break;
@@ -155,7 +156,12 @@ void* my_malloc(int size) {
 }
 
 void my_free(void* ptr) {
+  printf("my_free: freeing memory @ 0x%x\n", ptr);
 
+  free_list_node* block = ptr - 16;
+
+
+  printf("my_free: free size = %d\n", block->size);
 
 }
 
