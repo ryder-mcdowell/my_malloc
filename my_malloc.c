@@ -1,12 +1,12 @@
 #include "my_malloc.h"
 
-void* head = NULL;
+void *head = NULL;
 
 //TAKE space from free list, returns pointer to requested user-block
-void* useFreeSpace(free_list_node* old_free_block, free_list_node* last, int size) {
+void *useFreeSpace(free_list_node *old_free_block, free_list_node *last, int size) {
   printf("-USEFREEPACE: taking %d from block @ 0x%x\n", size, old_free_block);
-  free_list_node* new_free_block;
-  free_list_node* new_user_block;
+  free_list_node *new_free_block;
+  free_list_node *new_user_block;
 
 
   //setup new free block
@@ -44,11 +44,11 @@ void* useFreeSpace(free_list_node* old_free_block, free_list_node* last, int siz
 }
 
 //ALLOCATE more space and append to free list, returns previous break point
-void* allocateSpace(free_list_node* last) {
+void *allocateSpace(free_list_node *last) {
   printf("-ALLOCATESPACE: allocating new free block\n");
-  free_list_node* new_block;
+  free_list_node *new_block;
 
-  void* previous_break = sbrk(SIZE);
+  void *previous_break = sbrk(SIZE);
 
   //create and setup new free block
   new_block = previous_break;
@@ -67,9 +67,9 @@ void* allocateSpace(free_list_node* last) {
 }
 
 
-void* my_malloc(int size) {
-  void* user_space_break;
-  void* previous_break;
+void *my_malloc(int size) {
+  void *user_space_break;
+  void *previous_break;
 
   printf("MY_MALLOC: called with size = %d\n", size);
   printf("-my_malloc: head = 0x%x\n", head);
@@ -81,7 +81,7 @@ void* my_malloc(int size) {
 
     //returns previous break, takes last of free list
     previous_break = allocateSpace(NULL);
-    free_list_node* free_block = previous_break;
+    free_list_node *free_block = previous_break;
 
     head = previous_break;
 
@@ -92,9 +92,9 @@ void* my_malloc(int size) {
   //if free list
   } else {
     printf("-my_malloc: scanning free list...");
-    free_list_node* free_block;
-    free_list_node* last = NULL;
-    free_list_node* current = head;
+    free_list_node *free_block;
+    free_list_node *last = NULL;
+    free_list_node *current = head;
 
     //START SCAN
     while (current->next != NULL) {
@@ -125,6 +125,7 @@ void* my_malloc(int size) {
     }
     //END SCAN
 
+
     //if need more space (didn't find a free block)
     if (free_block != NULL) {
       printf("-my_malloc: free space is @ 0x%x\n", free_block);
@@ -139,30 +140,37 @@ void* my_malloc(int size) {
 
       //returns previous break
       previous_break = allocateSpace(last);
-      free_list_node* free_block = previous_break;
+      free_list_node *free_block = previous_break;
 
       //returns location of user's requested space
       user_space_break = useFreeSpace(free_block, last, size);
     }
-
-
   }
-
-
-
 
 
   return user_space_break;
 }
 
-void my_free(void* ptr) {
-  printf("my_free: freeing memory @ 0x%x\n", ptr);
-
+void my_free(void *ptr) {
   free_list_node* block = ptr - 16;
+  printf("my_free: freeing memory @ 0x%x with size %d\n", block, block->size);
 
+  //err check
+  if (block->size < 1 || block->size > 2048) {
+    printf("my_free: invalid pointer\n");
+    exit(1);
+  }
+
+  free_list_node* current;
+  current = head;
 
   printf("my_free: free size = %d\n", block->size);
 
+  while (current->next != NULL) {
+    current = current->next;
+  }
+  current->next = block;
+  block->next = NULL;
 }
 
 void print_free_list() {

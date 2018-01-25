@@ -9,52 +9,23 @@ int main() {
   double burgers[100];
   int hotdogs[200];
   char cheetos[1000];
+  char chips[100];
 
-  //printf("main: printing free list\n");
-  //print_free_list();
-
-  printf("main: allocating array of 100 doubles\n");
-  void* burgers_pointer = my_malloc(100 * sizeof(double));
-  printf("main: my memory starts at 0x%x\n", burgers_pointer);
-  print_free_list();
-
-  printf("main: allocating array of 100 integers\n");
-  void* tacos_pointer = my_malloc(100 * sizeof(int));
-  printf("main: my memory is at 0x%x\n", tacos_pointer);
-  print_free_list();
-
-  printf("main: allocating array of 1000 chars\n");
-  void *cheetos_pointer = my_malloc(1000 * sizeof(char));
-  printf("main: my memory is at 0x%x\n", cheetos_pointer);
-  print_free_list();
-
-  printf("main: allocating array of 100 doubles\n");
-  void *burritos_pointer = my_malloc(100 * sizeof(double));
-  printf("main: my memory is at 0x%x\n", burritos_pointer);
-  print_free_list();
-
-  printf("main: allocating array of 100 doubles\n");
-  burritos_pointer = my_malloc(100 * sizeof(double));
-  printf("main: my memory is at 0x%x\n", burritos_pointer);
+  printf("main: printing free list\n");
   print_free_list();
 
   printf("main: allocating array of 200 doubles\n");
-  burritos_pointer = my_malloc(200 * sizeof(double));
-  printf("main: my memory is at 0x%x\n", burritos_pointer);
+  void *burritos_pointer = my_malloc(sizeof(burritos));
+  printf("main: my memory starts at 0x%x\n", burritos_pointer);
   print_free_list();
 
-  printf("main: allocating array of 100 doubles\n");
-  burritos_pointer = my_malloc(100 * sizeof(double));
-  printf("main: my memory is at 0x%x\n", burritos_pointer);
-  print_free_list();
+  //printf("main: allocating array of 400 chars\n");
+  //cheetos_pointer = my_malloc(400 * sizeof(char));
+  //printf("main: my memory is at 0x%x\n", cheetos_pointer);
+  //print_free_list();
 
-  printf("main: allocating array of 200 chars\n");
-  cheetos_pointer = my_malloc(200 * sizeof(char));
-  printf("main: my memory is at 0x%x\n", cheetos_pointer);
-  print_free_list();
-
-  printf("main: freeing cheetos\n");
-  my_free(cheetos_pointer);
+  printf("main: freeing chips\n");
+  my_free(chips);
   print_free_list();
 
 
