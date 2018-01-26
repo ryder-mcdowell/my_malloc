@@ -109,12 +109,12 @@ void *my_malloc(int size) {
 
     //START SCAN
     while (current->next != NULL) {
-      if (current->size >= size && last == NULL) {
+      if ( (current->size >= size + 16 && last == NULL) || (current->size == size && last == NULL) ) {
         printf("found space in free list(first)\n");
         free_block = current;
         break;
 
-      } else if (current->size >= size && last != NULL) {
+      } else if ( (current->size >= size + 16 && last != NULL) || (current->size == size && last != NULL) ) {
         printf("found space in free list(middle)\n");
         free_block = current;
         break;
@@ -125,12 +125,12 @@ void *my_malloc(int size) {
       }
     }
     //only block in free list
-    if (current->size >= size && last == NULL && free_block == NULL) {
+    if ( (current->size >= size + 16 && last == NULL && free_block == NULL) || (current->size == size && last == NULL && free_block == NULL) ) {
       printf("found space in free list(only)\n");
       free_block = current;
     }
     //last block in free list
-    if (current->size >= size && last != NULL && free_block == NULL) {
+    if ( (current->size >= size + 16 && last != NULL && free_block == NULL) || (current->size == size && last != NULL && free_block == NULL) ) {
       printf("found space in free list(last)\n");
       free_block = current;
     }
@@ -141,14 +141,9 @@ void *my_malloc(int size) {
     if (free_block != NULL) {
       printf("-my_malloc: free space is @ 0x%x\n", free_block);
 
-      printf("RYDER: head = 0x%x\n", head);
-      printf("RYDER: last = 0x%x\n", last);
-
       //returns location of user's requested space
       user_space_break = useFreeSpace(free_block, last, size);
 
-      printf("RYDER: head = 0x%x\n", head);
-      printf("RYDER: last = 0x%x\n", last);
 
     //if need more space (didn't find a free block)
     } else {
@@ -197,13 +192,13 @@ void print_free_list() {
 
   if (current != NULL) {
     printf("==========FREE LIST================================\n");
-    printf("  NODE #  |      ADDRESS  |    SIZE  |         NEXT\n");
+    printf("    NODE #  |      ADDRESS  |    SIZE  |         NEXT\n");
     while (current->next != NULL) {
-      printf("       %d  |  0x  %7x  |    %4d  |  0x  %7x\n", number, current, current->size, current->next);
+      printf("       %3d  |  0x  %7x  |    %4d  |  0x  %7x\n", number, current, current->size, current->next);
       current = current->next;
       number = number + 1;
     }
-    printf("       %d  |  0x  %7x  |    %4d  |  0x  %7x\n", number, current, current->size, current->next);
+    printf("       %3d  |  0x  %7x  |    %4d  |  0x  %7x\n", number, current, current->size, current->next);
     printf("===================================================\n");
   } else {
     printf("==========FREE LIST================================\n");

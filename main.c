@@ -47,7 +47,7 @@ int main() {
 
 
 
-  int iters = 400;
+  int iters = 1000;
   srand(time(NULL));
   int i;
 
@@ -59,6 +59,10 @@ int main() {
     printf("main: my memory is at 0x%x\n", pointer);
     print_free_list();
   }
+
+  printf("main: memory is at 0x%x\n", pointer);
+  my_free(burritos_pointer);
+  my_free(pointer);
 
 
 
