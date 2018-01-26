@@ -49,6 +49,9 @@ void *allocateSpace(free_list_node *last) {
   free_list_node *new_block;
 
   void *previous_break = sbrk(SIZE);
+  if (previous_break == (void*)-1) {
+    return NULL;
+  }
 
   //create and setup new free block
   new_block = previous_break;
@@ -68,6 +71,10 @@ void *allocateSpace(free_list_node *last) {
 
 
 void *my_malloc(int size) {
+  if (size < 0 || size > 2048) {
+    return NULL;
+  }
+
   void *user_space_break;
   void *previous_break;
 
@@ -156,8 +163,8 @@ void my_free(void *ptr) {
   printf("my_free: freeing memory @ 0x%x with size %d\n", block, block->size);
 
   //err check
-  if (block->size < 1 || block->size > 2048) {
-    printf("my_free: invalid pointer\n");
+  if (block->size <= 0 || block->size > 2048) {
+    printf("my_free: invalid pointer: 0x%x\n");
     exit(1);
   }
 

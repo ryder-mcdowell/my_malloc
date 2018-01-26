@@ -11,6 +11,7 @@ int main() {
   char cheetos[1000];
   char chips[100];
 
+
   printf("main: printing free list\n");
   print_free_list();
 
@@ -19,14 +20,21 @@ int main() {
   printf("main: my memory starts at 0x%x\n", burritos_pointer);
   print_free_list();
 
+
   //printf("main: allocating array of 400 chars\n");
   //cheetos_pointer = my_malloc(400 * sizeof(char));
   //printf("main: my memory is at 0x%x\n", cheetos_pointer);
   //print_free_list();
 
-  printf("main: freeing chips\n");
-  my_free(chips);
+  printf("main: freeing burritos\n");
+  printf("size of burritos: %d\n", sizeof(burritos));
+  my_free(burritos);
   print_free_list();
+
+  // void *bananas = my_malloc(sizeof(chips));
+  // if (!bananas) {
+  //   printf("no\n");
+  // }
 
 
 
