@@ -55,14 +55,20 @@ int main() {
     int r = rand() % 10;
     r = r * 100;
     printf("main: allocating array of %d chars\n", r);
-    void *pointer = my_malloc(r * sizeof(char));
+    pointer = my_malloc(r * sizeof(char));
     printf("main: my memory is at 0x%x\n", pointer);
+    print_free_list();
+    my_free(pointer);
     print_free_list();
   }
 
-  printf("main: memory is at 0x%x\n", pointer);
-  my_free(burritos_pointer);
-  my_free(pointer);
+  // printf("main: memory is at 0x%x\n", burritos_pointer);
+  // printf("main: memory is at 0x%x\n", burritos_pointer - 16);
+  // my_free(burritos_pointer);
+  // printf("main: memory is at 0x%x\n", pointer);
+  // printf("main: memory is at 0x%x\n", pointer - 16);
+  // my_free(pointer);
+  // print_free_list();
 
 
 

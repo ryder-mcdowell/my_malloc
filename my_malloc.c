@@ -168,7 +168,7 @@ void my_free(void *ptr) {
   printf("my_free: freeing memory @ 0x%x with size %d\n", block, block->size);
 
   //err check
-  if (block->size <= 0 || block->size > 2048) {
+  if (block->size < 0 || block->size > 2032) {
     printf("my_free: invalid pointer: 0x%x\n");
     exit(1);
   }
