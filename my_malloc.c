@@ -8,6 +8,7 @@ void *useFreeSpace(free_list_node *old_free_block, free_list_node *last, int siz
   free_list_node *new_free_block;
   free_list_node *new_user_block;
 
+  printf("old size = %d, called size = %d\n", old_free_block->size, size);
 
   //setup new free block
   if (old_free_block->size != size) {
@@ -29,10 +30,9 @@ void *useFreeSpace(free_list_node *old_free_block, free_list_node *last, int siz
     if (last == NULL) {
       head = old_free_block->next;
     } else {
-      head = last;
+      last->next = NULL;
     }
   }
-
 
   //setup user's requested block
   new_user_block = (void*)old_free_block;
@@ -71,7 +71,11 @@ void *allocateSpace(free_list_node *last) {
 
 
 void *my_malloc(int size) {
-  if (size < 0 || size > 2048) {
+  if (size < 0) {
+    return NULL;
+  }
+  if (size > 2032) {
+    printf("Error: my_malloc doesn't support memory allocation larger than 2032 bytes\n");
     return NULL;
   }
 
@@ -99,7 +103,7 @@ void *my_malloc(int size) {
   //if free list
   } else {
     printf("-my_malloc: scanning free list...");
-    free_list_node *free_block;
+    free_list_node *free_block = NULL;
     free_list_node *last = NULL;
     free_list_node *current = head;
 
@@ -133,14 +137,20 @@ void *my_malloc(int size) {
     //END SCAN
 
 
-    //if need more space (didn't find a free block)
+    //if dont need more space (found a free block)
     if (free_block != NULL) {
       printf("-my_malloc: free space is @ 0x%x\n", free_block);
+
+      printf("RYDER: head = 0x%x\n", head);
+      printf("RYDER: last = 0x%x\n", last);
 
       //returns location of user's requested space
       user_space_break = useFreeSpace(free_block, last, size);
 
-    //if dont need more space (found a free block)
+      printf("RYDER: head = 0x%x\n", head);
+      printf("RYDER: last = 0x%x\n", last);
+
+    //if need more space (didn't find a free block)
     } else {
       printf("not enough space in free list\n");
       last = current;

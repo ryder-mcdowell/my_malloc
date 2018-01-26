@@ -1,4 +1,5 @@
 #include "my_malloc.h"
+#include <time.h>
 
 
 int main() {
@@ -15,26 +16,52 @@ int main() {
   printf("main: printing free list\n");
   print_free_list();
 
-  printf("main: allocating array of 200 doubles\n");
-  void *burritos_pointer = my_malloc(sizeof(burritos));
+  printf("main: allocating array of 250 doubles\n");
+  void *burritos_pointer = my_malloc(250 * sizeof(double));
   printf("main: my memory starts at 0x%x\n", burritos_pointer);
   print_free_list();
 
-
-  //printf("main: allocating array of 400 chars\n");
-  //cheetos_pointer = my_malloc(400 * sizeof(char));
-  //printf("main: my memory is at 0x%x\n", cheetos_pointer);
-  //print_free_list();
-
-  printf("main: freeing burritos\n");
-  printf("size of burritos: %d\n", sizeof(burritos));
-  my_free(burritos);
+  printf("main: allocating array of 250 doubles\n");
+  void *pointer = my_malloc(250 * sizeof(double));
+  printf("main: my memory starts at 0x%x\n", pointer);
   print_free_list();
 
-  // void *bananas = my_malloc(sizeof(chips));
-  // if (!bananas) {
-  //   printf("no\n");
-  // }
+  printf("main: allocating array of 200 doubles\n");
+  pointer = my_malloc(200 * sizeof(double));
+  printf("main: my memory starts at 0x%x\n", pointer);
+  print_free_list();
+
+  printf("main: allocating array of 416 chars\n");
+  pointer = my_malloc(416 * sizeof(char));
+  printf("main: my memory starts at 0x%x\n", pointer);
+  print_free_list();
+
+  //void *pointer = my_malloc(254 * sizeof(double));
+  //printf("main: my memory starts at 0x%x\n", pointer);
+  //print_free_list();
+
+  // void *chips_pointer = my_malloc(251 * sizeof(double));
+  // printf("main: my memory starts at 0x%x\n", chips_pointer);
+  // print_free_list();
+
+
+
+
+  int iters = 400;
+  srand(time(NULL));
+  int i;
+
+  for (i = 0; i < iters; i++) {
+    int r = rand() % 10;
+    r = r * 100;
+    printf("main: allocating array of %d chars\n", r);
+    void *pointer = my_malloc(r * sizeof(char));
+    printf("main: my memory is at 0x%x\n", pointer);
+    print_free_list();
+  }
+
+
+
 
 
 
