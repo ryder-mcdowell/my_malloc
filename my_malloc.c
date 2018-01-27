@@ -25,7 +25,7 @@ void *useFreeSpace(free_list_node *old_free_block, free_list_node *last, int siz
     if (last == NULL) {
       head = old_free_block->next;
     } else {
-      last->next = NULL;
+      last->next = old_free_block->next;
     }
   }
 
@@ -161,45 +161,44 @@ void *my_malloc(int size) {
 
 void my_free(void *ptr) {
   free_list_node* block = ptr - 16;
-  printf("my_free: freeing memory @ 0x%x with size %d\n", block, block->size);
+  fprintf(stderr, "my_free: called with 0x%x, size = %d\n", ptr, block->size);
 
   //err check
   if (block->size < 0 || block->size > 2032) {
-    printf("my_free: invalid pointer: 0x%x\n");
+    fprintf(stderr, "my_free: invalid pointer: 0x%x\n");
     exit(1);
   }
 
   free_list_node* current;
   current = head;
 
-  printf("my_free: free size = %d\n", block->size);
-
   while (current->next != NULL) {
     current = current->next;
   }
   current->next = block;
   block->next = NULL;
+  fprintf(stderr, "my_free: next = 0x%x\n", block->next);
 }
 
 void print_free_list() {
   free_list_node* current;
-  int number;
+  int number = 0;
   current = head;
 
   if (current != NULL) {
-    printf("==========FREE LIST================================\n");
-    printf("    NODE #  |      ADDRESS  |    SIZE  |         NEXT\n");
+    fprintf(stderr, "==========FREE LIST==================================\n");
+    fprintf(stderr, "    NODE #  |      ADDRESS  |    SIZE  |         NEXT\n");
     while (current->next != NULL) {
-      printf("       %3d  |  0x  %7x  |    %4d  |  0x  %7x\n", number, current, current->size, current->next);
+      fprintf(stderr, "       %3d  |  0x  %7x  |    %4d  |  0x  %7x\n", number, current, current->size, current->next);
       current = current->next;
       number = number + 1;
     }
-    printf("       %3d  |  0x  %7x  |    %4d  |  0x  %7x\n", number, current, current->size, current->next);
-    printf("===================================================\n");
+    fprintf(stderr, "       %3d  |  0x  %7x  |    %4d  |  0x  %7x\n", number, current, current->size, current->next);
+    fprintf(stderr, "=====================================================\n");
   } else {
-    printf("==========FREE LIST================================\n");
-    printf("  NODE #  |      ADDRESS  |    SIZE  |         NEXT\n");
-    printf("===================================================\n");
+    fprintf(stderr, "==========FREE LIST==================================\n");
+    fprintf(stderr, "  NODE #  |      ADDRESS  |    SIZE  |         NEXT\n");
+    fprintf(stderr, "=====================================================\n");
   }
 
 }

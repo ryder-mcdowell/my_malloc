@@ -26,6 +26,27 @@ int main() {
   fprintf(stderr, "main: printing free list:\n");
   print_free_list();
 
+  fprintf(stderr, "main: allocating array of 1000 cheetos\n");
+  void *cheetos_pointer = my_malloc(sizeof(cheetos));
+  fprintf(stderr, "main: printing free list:\n");
+  print_free_list();
+
+  fprintf(stderr, "main: freeing cheetos\n");
+  my_free(cheetos_pointer);
+  fprintf(stderr, "main: printing free list:\n");
+  print_free_list();
+
+  fprintf(stderr, "main: freeing tacos\n");
+  my_free(tacos_pointer);
+  fprintf(stderr, "main: printing free list:\n");
+  print_free_list();
+
+  fprintf(stderr, "main: freeing burgers\n");
+  my_free(burgers_pointer);
+  fprintf(stderr, "main: printing free list:\n");
+  print_free_list();
+
+
 
 
 
