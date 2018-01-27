@@ -30,7 +30,7 @@ void *useFreeSpace(free_list_node *old_free_block, free_list_node *last, int siz
     if (last == NULL) {
       head = old_free_block->next;
     } else {
-      last->next = NULL;
+      last->next = old_free_block->next;
     }
   }
 
@@ -187,7 +187,7 @@ void my_free(void *ptr) {
 
 void print_free_list() {
   free_list_node* current;
-  int number;
+  int number = 0;
   current = head;
 
   if (current != NULL) {

@@ -47,7 +47,7 @@ int main() {
 
 
 
-  int iters = 1000;
+  int iters = 100;
   srand(time(NULL));
   int i;
 
@@ -57,8 +57,8 @@ int main() {
     printf("main: allocating array of %d chars\n", r);
     pointer = my_malloc(r * sizeof(char));
     printf("main: my memory is at 0x%x\n", pointer);
-    print_free_list();
-    my_free(pointer);
+    //print_free_list();
+    //my_free(pointer);
     print_free_list();
   }
 
